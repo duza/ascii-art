@@ -7,10 +7,22 @@ class App extends Component {
     this.inputRef = React.createRef();
   }
 
+  executeCommands = string => {
+    console.log({ string });
+  };
+
+  handleReadFile = file => {
+    let reader = new FileReader();
+
+    reader.readAsText(file);
+    reader.onload = () => this.executeCommands(reader.result);
+    reader.onerror = () => alert(reader.error);
+  };
+
   handleUploadFile = () => {
     let file = this.inputRef.current.files[0];
 
-    alert(`File name: ${file.name}`);
+    this.handleReadFile(file);
   };
 
   render() {
