@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
 
 import execute from '../helpers/command';
+import Canvas from './Canvas';
 
 class App extends Component {
   constructor(props) {
@@ -10,12 +11,13 @@ class App extends Component {
     this.state = {};
   }
 
-  executeCommands = async string => {
+  handleSetState = newState => this.setState(newState);
+
+  executeCommands = string => {
     const commands = string.trim('\n').split('\n');
 
     for (let command of commands) {
-      const result = execute(command);
-      this.setState(result);
+      execute(command, this.handleSetState);
     }
   };
 
@@ -34,10 +36,12 @@ class App extends Component {
   };
 
   render() {
+    const { canvas } = this.state;
     return (
       <>
         <h1>ASCII art</h1>
         <input type='file' ref={this.inputRef} onChange={this.handleUploadFile} />
+        {canvas && <Canvas {...canvas}/>}
       </>
     );
   }
