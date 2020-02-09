@@ -7,13 +7,15 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.inputRef = React.createRef();
+    this.state = {};
   }
 
-  executeCommands = string => {
+  executeCommands = async string => {
     const commands = string.trim('\n').split('\n');
 
     for (let command of commands) {
-      execute(command);
+      const result = execute(command);
+      this.setState(result);
     }
   };
 
