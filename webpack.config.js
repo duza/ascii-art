@@ -1,11 +1,15 @@
 const webpack = require('webpack');
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const resolveAppPath = relativePath => path.resolve(__dirname, relativePath);
 
 let config = {
-    entry: './src/index.js',
+    mode: process.env.NODE_ENV,
+    entry: ['react-hot-loader/patch', './src'],
     output: {
-        path: path.resolve(__dirname, './public/js'),
+        path: resolveAppPath('./public'),
         filename: 'main.js'
     },
     module: {
@@ -17,15 +21,23 @@ let config = {
             }
         ]
     },
+    plugins: [
+        new HtmlWebpackPlugin({
+            inject: true,
+            template: resolveAppPath('./templates/index.html'),
+        })
+    ],
     optimization: {
         minimizer: []
     },
     devServer: {
+        port: 3000,
+        index: 'index.html',
+        contentBase: resolveAppPath('public'),
+        hot: true,
+        historyApiFallback: true,
+        inline: true,
         compress: true,
-        port: 8000,
-        contentBase: path.resolve(__dirname, './public'), // A directory or URL to serve HTML content from.
-        // historyApiFallback: true, // fallback to /index.html for Single Page Applications.
-        // inline: true, // inline mode (set to false to disable including client scripts (like livereload)
         open: true
     },
     devtool: 'eval-source-map'
