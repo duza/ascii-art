@@ -14,7 +14,22 @@ class Line {
 
   isHorizontal = (ordinate1 = this.first.y, ordinate2 = this.second.y) => ordinate1 === ordinate2;
 
+  isSmallest = (first = this.first, second = this.second) => first.x === second.x && first.y === second.y;
+
   draw = canvas => {
+    if (this.isSmallest()) {
+      return new Canvas({
+        ...canvas,
+        cells: canvas.cells.map(cell => {
+          if (this.isSmallest(cell)) {
+            return new Cell({...cell, fill: this.fill || '|'});
+          }
+
+          return cell;
+        }),
+      });
+    }
+
     if (this.isVertical()) {
       return this.drawVerticalLine(canvas);
     }

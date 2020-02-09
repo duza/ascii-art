@@ -1,5 +1,5 @@
 import Cell from './Cell';
-import Line from './Line';
+import Rectangle from './Rectangle';
 
 class Canvas {
   constructor({ width, height, cells = []}) {
@@ -31,14 +31,7 @@ class Canvas {
     const lastAbscissa = this.width + 1;
     const lastOrdinate = this.height + 1;
 
-    const canvasWithTopBorder = new Line({ x1: 0, y1: 0, x2: lastAbscissa, y2: 0 }).draw(this);
-    const canvasWithBottomBorder = new Line({ x1: 0, y1: lastOrdinate, x2: lastAbscissa, y2: lastOrdinate })
-      .draw(canvasWithTopBorder);
-    const canvasWithLeftBorder = new Line ({ x1: 0, y1: 1, x2: 0, y2: this.height })
-      .draw(canvasWithBottomBorder);
-
-    return new Line({ x1: lastAbscissa, y1: 1, x2: lastAbscissa, y2: this.height })
-      .draw(canvasWithLeftBorder); // with all boundaries
+    return new Rectangle({ x1: 0, y1: 0, x2: lastAbscissa, y2: lastOrdinate }).draw(this);
   }
 }
 
