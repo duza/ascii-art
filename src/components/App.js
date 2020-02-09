@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
 
+import execute from '../helpers/command';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -8,7 +10,11 @@ class App extends Component {
   }
 
   executeCommands = string => {
-    console.log({ string });
+    const commands = string.trim('\n').split('\n');
+
+    for (let command of commands) {
+      execute(command);
+    }
   };
 
   handleReadFile = file => {
