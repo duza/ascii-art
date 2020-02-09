@@ -1,41 +1,45 @@
+import Cell from './Cell';
+import Line from './Line';
+
 class Canvas {
-  constructor(width, height) {
+  constructor({ width, height, cells = []}) {
     this.width = +width;
     this.height = +height;
-    const dimension = this.width + 2;
-    this.cells = Array( dimension * 2 + this.height * 2 + this.width * this.height).fill()
-      .map((_, i) => this.initialize(_, i, dimension))
-      .map(this.fillBoundaries);
+    this.cells = cells;
 
     Object.freeze(this.cells);
     Object.freeze(this);
   }
 
-  initialize = (_, index, dimension) => new Cell({
+  fillEmptyCells = () => {
+    const dimension = this.width + 2;
+
+    return new Canvas({
+      ...this,
+      cells: Array( dimension * 2 + this.height * 2 + this.width * this.height).fill()
+        .map((_, i) => this.fillEmpty(_, i, dimension)),
+    });
+  };
+
+  fillEmpty = (_, index, dimension) => new Cell({
     x: index % dimension,
     y:  Math.floor(index / dimension),
     fill: '',
   });
 
-  fillBoundaries = cell => {
-    if ((cell.x === 0 || cell.x === this.width + 1) && cell.y > 0 && cell.y < this.height + 1) {
-      return new Cell({ ...cell, fill: '|' });
-    }
-    if (cell.y === 0 || cell.y === this.height + 1) {
-      return new Cell({ ...cell, fill: '-' }) ;
-    }
+  drawBoundaries = () => {
+    const lastAbscissa = this.width + 1;
+    const lastOrdinate = this.height + 1;
 
-    return cell;
+    const canvasWithTopBorder = new Line({ x1: 0, y1: 0, x2: lastAbscissa, y2: 0 }).draw(this);
+    const canvasWithBottomBorder = new Line({ x1: 0, y1: lastOrdinate, x2: lastAbscissa, y2: lastOrdinate })
+      .draw(canvasWithTopBorder);
+    const canvasWithLeftBorder = new Line ({ x1: 0, y1: 1, x2: 0, y2: this.height })
+      .draw(canvasWithBottomBorder);
+
+    return new Line({ x1: lastAbscissa, y1: 1, x2: lastAbscissa, y2: this.height })
+      .draw(canvasWithLeftBorder); // with all boundaries
   }
 }
 
-class Cell {
-  constructor({ x, y, fill }) {
-    this.x = x;
-    this.y = y;
-    this.fill = fill;
-
-    Object.freeze(this);
-  }
-}
 export default Canvas;

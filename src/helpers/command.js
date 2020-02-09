@@ -1,4 +1,5 @@
 import Canvas from '../models/Canvas';
+import Line from '../models/Line';
 
 const execute = (command, setState) => {
   const [commandType, ...info] = command.split(' ');
@@ -6,9 +7,18 @@ const execute = (command, setState) => {
   switch (commandType) {
     case 'C': {
       const [width, height] = info;
-      setState({ canvas: new Canvas(width, height) });
+      const canvas = new Canvas({ width, height })
+        .fillEmptyCells()
+        .drawBoundaries();
+
+      setState({ canvas });
+      break;
     }
     case 'L': {
+      const [x1, y1, x2, y2] = info;
+      setState(({ canvas }) => ({
+        canvas: new Line({ x1, y1, x2, y2, fill: 'x' }).draw(canvas),
+      }));
       break;
     }
     default: {
