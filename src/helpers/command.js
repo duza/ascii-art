@@ -1,6 +1,7 @@
 import Canvas from '../models/Canvas';
 import Line from '../models/Line';
-import Rectangle from "../models/Rectangle";
+import Rectangle from '../models/Rectangle';
+import BucketFill from '../models/BucketFill';
 
 const execute = (command, setState) => {
   const [commandType, ...info] = command.split(' ');
@@ -29,12 +30,18 @@ const execute = (command, setState) => {
       }));
       break;
     }
+    case 'B': {
+      const [x, y, fill] = info;
+      setState(({ canvas }) => ({
+        canvas: new BucketFill({ x, y, fill }).draw(canvas),
+      }));
+      break;
+    }
     default: {
       console.error(`Unrecognized command ${commandType}!!! Error!`);
       break;
     }
   }
-  console.log({commandType, info});
 };
 
 export default execute;
