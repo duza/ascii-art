@@ -3,6 +3,7 @@ import { hot } from 'react-hot-loader/root';
 
 import execute from '../helpers/command';
 import Canvas from './Canvas';
+import ErrorBoundary from './ErrorBoundary';
 
 class App extends Component {
   constructor(props) {
@@ -14,10 +15,17 @@ class App extends Component {
   handleSetState = newState => this.setState(newState);
 
   executeCommands = string => {
-    const commands = string.trim('\n').split('\n');
+    try {
+      const commands = string.trim('\n').split('\n');
 
-    for (let command of commands) {
-      execute(command, this.handleSetState);
+      for (let command of commands) {
+        this.setState(({ canvas }) => ({
+          canvas: execute(command, canvas, this.handleSetState)
+        }));
+      }
+    } catch (e) {
+      console.error(e);
+      this.setState({ error: e });
     }
   };
 
@@ -26,23 +34,42 @@ class App extends Component {
 
     reader.readAsText(file);
     reader.onload = () => this.executeCommands(reader.result);
-    reader.onerror = () => alert(reader.error);
+    reader.onerror = () => {
+      console.error(reader.error);
+      this.setState({ error: reader.error });
+    }
   };
 
   handleUploadFile = () => {
-    let file = this.inputRef.current.files[0];
+    try {
+      let file = this.inputRef.current.files[0];
 
-    this.handleReadFile(file);
+      this.handleReadFile(file);
+    } catch (e) {
+      console.error(e);
+      this.setState({ error: e });
+    }
   };
 
   render() {
-    const { canvas } = this.state;
+    const { canvas, error } = this.state;
+
     return (
-      <>
-        <h1>ASCII art</h1>
-        <input type='file' ref={this.inputRef} onChange={this.handleUploadFile} />
-        {canvas && <Canvas {...canvas}/>}
-      </>
+      <ErrorBoundary>
+        {hasError => (
+          <>
+            <h1>ASCII art</h1>
+            {(hasError || error)
+              ? <h2>Something went wrong. Please reload page.</h2>
+              : (
+                <>
+                  <input type='file' ref={this.inputRef} onChange={this.handleUploadFile} />
+                  {canvas && <Canvas {...canvas}/>}
+                </>
+            )}
+          </>
+        )}
+      </ErrorBoundary>
     );
   }
 }

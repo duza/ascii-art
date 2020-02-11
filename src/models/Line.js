@@ -1,5 +1,6 @@
 import Canvas from './Canvas';
 import Cell from './Cell';
+import CanvasWasNotFoundError from '../errors/CanvasWasNotFoundError';
 
 class Line {
   constructor({ x1, y1, x2, y2, fill = null }) {
@@ -17,6 +18,10 @@ class Line {
   isSmallest = (first = this.first, second = this.second) => first.x === second.x && first.y === second.y;
 
   draw = canvas => {
+    if (!canvas) {
+      throw new CanvasWasNotFoundError;
+    }
+
     if (this.isSmallest()) {
       return new Canvas({
         ...canvas,

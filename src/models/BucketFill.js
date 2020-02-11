@@ -1,5 +1,6 @@
 import Canvas from './Canvas';
 import Cell from './Cell';
+import CanvasWasNotFoundError from '../errors/CanvasWasNotFoundError';
 
 class BucketFill {
   constructor(props) {
@@ -47,6 +48,10 @@ class BucketFill {
   };
 
   draw(canvas) {
+    if (!canvas) {
+      throw new CanvasWasNotFoundError;
+    }
+
     const { cells } = canvas;
     const fillingCells = this.searchEmptyCells(cells);
 

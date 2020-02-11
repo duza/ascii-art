@@ -1,5 +1,6 @@
 import Cell from './Cell';
 import Line from './Line';
+import CanvasWasNotFoundError from '../errors/CanvasWasNotFoundError';
 
 class Rectangle {
   constructor({ x1, y1, x2, y2, fill = null }) {
@@ -11,6 +12,10 @@ class Rectangle {
   }
 
   draw = canvas => {
+    if (!canvas) {
+      throw new CanvasWasNotFoundError;
+    }
+
     const rightTop = new Cell({ x: this.rightBottom.x, y: this.leftTop.y });
     const leftBottom = new Cell({ x: this.leftTop.x, y: this.rightBottom.y });
 
