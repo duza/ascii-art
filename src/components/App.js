@@ -14,13 +14,15 @@ class App extends Component {
 
   handleSetState = newState => this.setState(newState);
 
-  executeCommands = string => {
+  setStateAsync = async state => this.setState(state);
+
+  executeCommands = async string => {
     try {
       const commands = string.trim('\n').split('\n');
 
       for (let command of commands) {
-        this.setState(({ canvas }) => ({
-          canvas: execute(command, canvas, this.handleSetState)
+        await this.setStateAsync( ({ canvas }) => ({
+          canvas: execute(command, canvas, this.handleSetState),
         }));
       }
     } catch (e) {
