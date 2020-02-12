@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "build": "NODE_ENV=production webpack --config webpack.config.js",
     "watch": "NODE_ENV=development webpack --watch --config webpack.config.js",
     "start": "NODE_ENV=development webpack-dev-server --hot --config webpack.config.js"
@@ -20,6 +20,7 @@
     "@babel/preset-react": "^7.8.3",
     "babel-loader": "^8.0.6",
     "html-webpack-plugin": "^4.0.0-beta.11",
+    "jest": "^25.1.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
