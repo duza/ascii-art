@@ -43,13 +43,13 @@ class BucketFill {
         }
       }
 
-     return visited;
+      return visited;
     }
   };
 
   draw(canvas) {
     if (!canvas) {
-      throw new CanvasWasNotFoundError;
+      throw new CanvasWasNotFoundError();
     }
 
     const { cells } = canvas;

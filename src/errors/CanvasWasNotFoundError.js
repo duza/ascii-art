@@ -3,4 +3,4 @@ export default class CanvasWasNotFoundError extends Error {
     super(message);
     this.name = 'CanvasWasNotFoundError';
   }
-};
+}

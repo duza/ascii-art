@@ -19,12 +19,16 @@ const execute = (command, canvas, setState) => {
       case 'L': {
         const [x1, y1, x2, y2] = info;
 
-        return new Line({ x1, y1, x2, y2, fill: 'x' }).draw(canvas);
+        return new Line({
+          x1, y1, x2, y2, fill: 'x',
+        }).draw(canvas);
       }
       case 'R': {
         const [x1, y1, x2, y2] = info;
 
-        return new Rectangle({ x1, y1, x2, y2, fill: 'x' }).draw(canvas);
+        return new Rectangle({
+          x1, y1, x2, y2, fill: 'x',
+        }).draw(canvas);
       }
       case 'B': {
         const [x, y, fill] = info;

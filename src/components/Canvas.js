@@ -13,12 +13,13 @@ const style = {
 
 const Canvas = ({ cells, width, height }) => (
   <div style={{ ...style, width: `${width + 2}em`, height: `${height + 2}em` }}>
-    {cells && cells.map(cell =>
-      (<Cell
+    {cells && cells.map(cell => (
+      <Cell
         key={`${cell.x}-${cell.y}`}
         {...cell}
         width={width}
-      />))}
+      />
+    ))}
   </div>
 );
 

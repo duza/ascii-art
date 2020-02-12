@@ -3,7 +3,9 @@ import Line from './Line';
 import CanvasWasNotFoundError from '../errors/CanvasWasNotFoundError';
 
 class Rectangle {
-  constructor({ x1, y1, x2, y2, fill = null }) {
+  constructor({
+    x1, y1, x2, y2, fill = null,
+  }) {
     this.leftTop = new Cell({ x: x1, y: y1 });
     this.rightBottom = new Cell({ x: x2, y: y2 });
     this.fill = fill;
@@ -13,7 +15,7 @@ class Rectangle {
 
   draw = canvas => {
     if (!canvas) {
-      throw new CanvasWasNotFoundError;
+      throw new CanvasWasNotFoundError();
     }
 
     const rightTop = new Cell({ x: this.rightBottom.x, y: this.leftTop.y });
@@ -35,7 +37,7 @@ class Rectangle {
       fill: this.fill,
     }).draw(canvasWithTopBorder);
 
-    const canvasWithLeftBorder = new Line ({
+    const canvasWithLeftBorder = new Line({
       x1: this.leftTop.x,
       y1: this.leftTop.y + 1,
       x2: leftBottom.x,

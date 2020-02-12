@@ -3,7 +3,9 @@ import Cell from './Cell';
 import CanvasWasNotFoundError from '../errors/CanvasWasNotFoundError';
 
 class Line {
-  constructor({ x1, y1, x2, y2, fill = null }) {
+  constructor({
+    x1, y1, x2, y2, fill = null,
+  }) {
     this.first = new Cell({ x: x1, y: y1 });
     this.second = new Cell({ x: x2, y: y2 });
     this.fill = fill;
@@ -19,7 +21,7 @@ class Line {
 
   draw = canvas => {
     if (!canvas) {
-      throw new CanvasWasNotFoundError;
+      throw new CanvasWasNotFoundError();
     }
 
     if (this.isSmallest()) {
@@ -27,7 +29,7 @@ class Line {
         ...canvas,
         cells: canvas.cells.map(cell => {
           if (this.isSmallest(cell)) {
-            return new Cell({...cell, fill: this.fill || '|'});
+            return new Cell({ ...cell, fill: this.fill || '|' });
           }
 
           return cell;

@@ -20,8 +20,8 @@ class App extends Component {
     try {
       const commands = string.trim('\n').split('\n');
 
-      for (let command of commands) {
-        await this.setStateAsync( ({ canvas }) => ({
+      for (const command of commands) {
+        await this.setStateAsync(({ canvas }) => ({
           canvas: execute(command, canvas, this.handleSetState),
         }));
       }
@@ -32,19 +32,19 @@ class App extends Component {
   };
 
   handleReadFile = file => {
-    let reader = new FileReader();
+    const reader = new FileReader();
 
     reader.readAsText(file);
     reader.onload = () => this.executeCommands(reader.result);
     reader.onerror = () => {
       console.error(reader.error);
       this.setState({ error: reader.error });
-    }
+    };
   };
 
   handleUploadFile = () => {
     try {
-      let file = this.inputRef.current.files[0];
+      const file = this.inputRef.current.files[0];
 
       this.handleReadFile(file);
     } catch (e) {
@@ -65,10 +65,10 @@ class App extends Component {
               ? <h2>Something went wrong. Please reload page.</h2>
               : (
                 <>
-                  <input type='file' ref={this.inputRef} onChange={this.handleUploadFile} />
-                  {canvas && <Canvas {...canvas}/>}
+                  <input onChange={this.handleUploadFile} ref={this.inputRef} type="file" />
+                  {canvas && <Canvas {...canvas} />}
                 </>
-            )}
+              )}
           </>
         )}
       </ErrorBoundary>

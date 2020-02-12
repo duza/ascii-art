@@ -3,4 +3,4 @@ export default class UnrecognizedCommandError extends Error {
     super(message);
     this.name = 'UnrecognizedCommandError';
   }
-};
+}
