@@ -8,11 +8,16 @@
     "build": "NODE_ENV=production webpack --config webpack.config.js",
     "watch": "NODE_ENV=development webpack --watch --config webpack.config.js",
     "start": "NODE_ENV=development webpack-dev-server --hot --config webpack.config.js",
-    "eslint": "eslint --fix ./src "
+    "eslint": "eslint ./src "
   },
   "author": "duza",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-hot-loader": "^4.12.19"
+  },
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -29,10 +34,6 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "html-webpack-plugin": "^4.0.0-beta.11",
     "jest": "^25.1.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-hot-loader": "^4.12.19",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",

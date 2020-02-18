@@ -1,6 +1,7 @@
 import Canvas from './Canvas';
 import Cell from './Cell';
 import CanvasWasNotFoundError from '../errors/CanvasWasNotFoundError';
+import { NEIGHBORS_SHIFTS } from '../constants/constants';
 
 class BucketFill {
   constructor(props) {
@@ -9,36 +10,31 @@ class BucketFill {
     Object.freeze(this);
   }
 
-  findByCoordinates = (x, y) => cell => x === cell.x && y === cell.y;
+  // TODO consider using Map instead of an array and avoid array enumeration where possible
+  findCell = ({ cellList, cell, width }) => cellList[Cell.getIndex(width, cell.x, cell.y)];
 
-  findCell = (cells, x, y) => cells.find(this.findByCoordinates(x, y));
+  getNeighbors = ({ cellList, cell, width }) => NEIGHBORS_SHIFTS.map(shift => this.findCell({
+    cellList,
+    cell: { x: cell.x + shift[0], y: cell.y + shift[1] },
+    width,
+  })).filter(cell => cell);
 
-  getNeighbors = (cells, { x, y }) => [
-    this.findCell(cells, x - 1, y),
-    this.findCell(cells, x - 1, y - 1),
-    this.findCell(cells, x, y - 1),
-    this.findCell(cells, x + 1, y - 1),
-    this.findCell(cells, x + 1, y),
-    this.findCell(cells, x + 1, y + 1),
-    this.findCell(cells, x, y + 1),
-    this.findCell(cells, x - 1, y + 1),
-  ].filter(cell => cell);
+  getEmptyNeighbors = ({ cellList, cell, width }) => this.getNeighbors({ cellList, cell, width })
+    .filter(cell => !cell.fill);
 
-  getEmptyNeighbors = (cells, cell) => this.getNeighbors(cells, cell).filter(cell => !cell.fill);
-
-  searchEmptyCells = cells => {
-    const start = this.findCell(cells, this.cell.x, this.cell.y);
+  searchEmptyCells = (cells, width) => {
+    const start = this.findCell({ cellList: cells, cell: this.cell, width });
 
     if (!start.fill) {
       const visited = new Set();
       let queue = [start];
 
-      while (queue && queue.length) {
-        const cell = queue.pop();
+      while (queue.length) {
+        const cell = queue.shift();
 
         if (!visited.has(cell)) {
           visited.add(cell);
-          const emptyNeighbors = this.getEmptyNeighbors(cells, cell).filter(cell => !visited.has(cell));
+          const emptyNeighbors = this.getEmptyNeighbors({ cellList: cells, cell, width }).filter(cell => !queue.includes(cell) && !visited.has(cell));
           queue = [...queue, ...emptyNeighbors];
         }
       }
@@ -51,10 +47,8 @@ class BucketFill {
     if (!canvas) {
       throw new CanvasWasNotFoundError();
     }
-
-    const { cells } = canvas;
-    const fillingCells = this.searchEmptyCells(cells);
-
+    const { cells, width } = canvas;
+    const fillingCells = this.searchEmptyCells(cells, width);
     return new Canvas({
       ...canvas,
       cells: cells.map(cell => {

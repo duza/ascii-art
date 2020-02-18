@@ -1,5 +1,8 @@
+import PropTypes from 'prop-types';
+
 import Cell from './Cell';
 import Rectangle from './Rectangle';
+import { BORDER_DIMENSION } from '../constants/constants';
 
 class Canvas {
   constructor({ width, height, cells = [] }) {
@@ -12,7 +15,7 @@ class Canvas {
   }
 
   fillEmptyCells = () => {
-    const dimension = this.width + 2;
+    const dimension = this.width + BORDER_DIMENSION;
 
     return new Canvas({
       ...this,
@@ -34,6 +37,12 @@ class Canvas {
     return new Rectangle({
       x1: 0, y1: 0, x2: lastAbscissa, y2: lastOrdinate,
     }).draw(this);
+  };
+
+  static shape = {
+    cells: PropTypes.arrayOf(PropTypes.shape(Cell.shape)),
+    width: PropTypes.number,
+    height: PropTypes.number,
   }
 }
 

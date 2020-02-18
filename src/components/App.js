@@ -20,11 +20,11 @@ class App extends Component {
     try {
       const commands = string.trim('\n').split('\n');
 
-      for (const command of commands) {
-        await this.setStateAsync(({ canvas }) => ({
+      commands.forEach(command => {
+        this.setStateAsync(({ canvas }) => ({
           canvas: execute(command, canvas, this.handleSetState),
         }));
-      }
+      });
     } catch (e) {
       console.error(e);
       this.setState({ error: e });

@@ -1,6 +1,8 @@
 import React from 'react';
 
 import Cell from './Cell';
+import CanvasModel from '../models/Canvas';
+import { BORDER_DIMENSION } from '../constants/constants';
 
 const style = {
   display: 'flex',
@@ -12,15 +14,16 @@ const style = {
 };
 
 const Canvas = ({ cells, width, height }) => (
-  <div style={{ ...style, width: `${width + 2}em`, height: `${height + 2}em` }}>
+  <div style={{ ...style, width: `${width + BORDER_DIMENSION}em`, height: `${height + BORDER_DIMENSION}em` }}>
     {cells && cells.map(cell => (
       <Cell
         key={`${cell.x}-${cell.y}`}
         {...cell}
-        width={width}
       />
     ))}
   </div>
 );
+
+Canvas.propTypes = CanvasModel.shape;
 
 export default Canvas;
